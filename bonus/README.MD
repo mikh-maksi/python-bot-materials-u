@@ -2,7 +2,7 @@
 ```py
 import logging
 
-# Две основные кнопки: доход и расход. Нажимая любую - выводится сообщение: "Введите размер доход/расхода"
+# Дві основні кнопки: дохід та витрата. Натискаючи будь-яку - виводиться повідомлення: "Введіть розмір доходу/витрати"
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext, MessageHandler, Filters
@@ -36,7 +36,7 @@ def key_buttons():
 def start(update: Update, context: CallbackContext) -> None:
     keyboard = key_buttons()
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text('Выберите один из вариантов:', reply_markup=reply_markup)
+    update.message.reply_text('Оберіть один з варіантів:', reply_markup=reply_markup)
 
 
 def button(update: Update, context: CallbackContext) -> None:
@@ -44,7 +44,7 @@ def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
     if query.data == 'income':
-        query.edit_message_text(text=f"Введите размер дохода")
+        query.edit_message_text(text=f"Введіть розмір доходу")
         condition = 1
     elif query.data == 'cost':
         query.edit_message_text(text=f"Введите размер затрат")
@@ -60,7 +60,7 @@ def echo(update, context):
         condition = 0
         if not check(string_in):
             account = account + int(string_in)
-            string_out = "Состояние вашего счета: "+str(account)
+            string_out = "Стан вашого рахунку: "+str(account)
         else:
             string_out = check_strings[check(string_in)]
 
