@@ -84,21 +84,18 @@ print(s)
 Вставте в поле для коду текст програми ехобота:  
 
 ```py
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Application, MessageHandler, filters
 
-def echo(update, context):
+async def echo(update, context):
     string_in = update.message.text
     string_out = string_in
-    update.message.reply_text(string_out)
+    await update.message.reply_text(string_out)
 
-updater = Updater("")
+application = Application.builder().token("").build()
 
-dispatcher = updater.dispatcher
+application.add_handler(MessageHandler(filters.TEXT, echo))
 
-dispatcher.add_handler(MessageHandler(Filters.all, echo))
-
-updater.start_polling()
-updater.idle()
+application.run_polling()
 ```
 
 Для того, щоб створений вами бот у "батьку всіх ботів" <a href = "https://web.telegram.org/z/#93372553" target = "_blank">спеціальному боті BotFather</a> почав відповідати нам на всі повідомлення, що вводить користувач, необхідно запустити програму з кодом підключення до нього:
