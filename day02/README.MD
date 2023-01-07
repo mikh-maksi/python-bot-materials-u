@@ -6,9 +6,9 @@
 Якщо дивитися по суті, то команда `/start` - це відповідний рядок. При цьому ми вже навчилися читати рядки - ми всі значення, що отримуються, відправляємо в змінну `string_in`.
 Відповідно рішенням цієї задачі буде те, що ми перевіряємо рядок, який вводить користувач. Якщо вона дорівнює `/start`, ми надсилаємо користувачеві вітальне повідомлення. У всіх інших випадках - відправляємо те повідомлення, яке відправляє користувач.
 ```py
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Application, MessageHandler, filters
 
-def echo(update, context):
+async def echo(update, context):
     string_in = update.message.text
 
     if string_in == '/start':
@@ -16,16 +16,13 @@ def echo(update, context):
     else:
         string_out = string_in
 
-    update.message.reply_text(string_out)
+    await update.message.reply_text(string_out)
 
-updater = Updater("")
+application = Application.builder().token("5722992818:AAGS0T-86JnKxqNJIqyebiHYPOzkWn5k5rM").build()
 
-dispatcher = updater.dispatcher
+application.add_handler(MessageHandler(filters.TEXT, echo))
 
-dispatcher.add_handler(MessageHandler(Filters.all, echo))
-
-updater.start_polling()
-updater.idle()
+application.run_polling()
 ```
 
 У рядку, що повертається, при введенні команди `/start` може повертатися будь-яке значення. Ви можете коригувати його самостійно.
@@ -41,9 +38,9 @@ updater.idle()
 Додамо до відправки інформації при отриманні команди `/start` реакцію на команду `/help`
 
 ```py
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Application, MessageHandler, filters
 
-def echo(update, context):
+async def echo(update, context):
     string_in = update.message.text
 
     if string_in == '/help':
@@ -51,26 +48,21 @@ def echo(update, context):
     else:
         string_out = string_in
 
-    update.message.reply_text(string_out)
+    await update.message.reply_text(string_out)
 
-updater = Updater("")
+application = Application.builder().token("5722992818:AAGS0T-86JnKxqNJIqyebiHYPOzkWn5k5rM").build()
 
-dispatcher = updater.dispatcher
+application.add_handler(MessageHandler(filters.TEXT, echo))
 
-dispatcher.add_handler(MessageHandler(Filters.all, echo))
-
-updater.start_polling()
-updater.idle()
-
-
+application.run_polling()
 ```
 ## Команды /help и /start
 Для того, чтобы объединить функционал команд и бот мог одновременно обрабатывать команды `/help` и `/start` воспользуемся оператором `elif`. Данный оператор используется внутри основного оператора выбора `if` и позволяет добавлять ветвь решения. Например, если входная строка `string_in` не равна `/start`, то мы не сразу возвращаем входную строку (присваиваем переменной `string_in` значение `string_out`), а проверяем не равна ли входная строка значению `/help`. Если равна - выводим сообщение-ответ подготовленный для команды `/help`. И только если при второй проверке мы получаем результат `False` - тогда возвращаем входное значение.
 
 ```py
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Application, MessageHandler, filters
 
-def echo(update, context):
+async def echo(update, context):
     string_in = update.message.text
 
     if string_in == '/start':
@@ -80,17 +72,13 @@ def echo(update, context):
     else:
         string_out = string_in
 
+    await update.message.reply_text(string_out)
 
-    update.message.reply_text(string_out)
+application = Application.builder().token("").build()
 
-updater = Updater("")
+application.add_handler(MessageHandler(filters.TEXT, echo))
 
-dispatcher = updater.dispatcher
-
-dispatcher.add_handler(MessageHandler(Filters.all, echo))
-
-updater.start_polling()
-updater.idle()
+application.run_polling()
 
 ```
 
