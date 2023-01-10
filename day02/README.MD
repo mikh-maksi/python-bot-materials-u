@@ -18,7 +18,7 @@ async def echo(update, context):
 
     await update.message.reply_text(string_out)
 
-application = Application.builder().token("5722992818:AAGS0T-86JnKxqNJIqyebiHYPOzkWn5k5rM").build()
+application = Application.builder().token("").build()
 
 application.add_handler(MessageHandler(filters.TEXT, echo))
 
@@ -50,7 +50,7 @@ async def echo(update, context):
 
     await update.message.reply_text(string_out)
 
-application = Application.builder().token("5722992818:AAGS0T-86JnKxqNJIqyebiHYPOzkWn5k5rM").build()
+application = Application.builder().token("").build()
 
 application.add_handler(MessageHandler(filters.TEXT, echo))
 
