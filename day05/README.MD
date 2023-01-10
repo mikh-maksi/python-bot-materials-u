@@ -79,18 +79,18 @@ if elements[0]=='/total':
 * `account = account + int(elements[1])` - додавання значення до змінної `account`, яка зберігає поточний стан вашого рахунку
 * `string_out = str(account)` - переклад числове значення змінної `account` у рядкове для виведення користувачеві.
 ```py
-from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
+from telegram.ext import Application, MessageHandler, filters, CommandHandler
 account = 0
 
-def income(update, context):
+async def income(update, context):
     global account
     string_in = update.message.text
     elements = string_in.split(' ')
     account = account + int(elements[1])
     string_out = str(account)
-    update.message.reply_text(string_out)
+    await update.message.reply_text(string_out)
 
-def echo(update, context):
+async def echo(update, context):
     string_in = update.message.text
 
     if string_in == '/start':
@@ -98,17 +98,13 @@ def echo(update, context):
     else:
         string_out = string_in
 
-    update.message.reply_text(string_out)
+    await update.message.reply_text(string_out)
 
-updater = Updater("")
+application = Application.builder().token("").build()
 
-dispatcher = updater.dispatcher
+application.add_handler(CommandHandler('income', income))
+application.add_handler(MessageHandler(filters.TEXT, echo))
 
-dispatcher.add_handler(CommandHandler('income', income))
-dispatcher.add_handler(MessageHandler(Filters.all, echo))
-
-updater.start_polling()
-updater.idle()
 ```
 
 Додамо нашому боту обробник для команди `/cost` з функціоналом аналогічним обробнику команди `/income` з тією лише відмінністю, що значення параметра при `/cost` буде зменшувати значення змінної `account`
