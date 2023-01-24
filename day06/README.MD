@@ -154,5 +154,107 @@ else:
 print(check_strings[n])
 ```
 
+Створимо функцію, що реалізує цей функціонал.
+```py
+def check_sting_in(string_in):
+    check_strings = ["Your input is correct","Your input is empty","First symbol of your input is not slash.","Your input does not contain spaces","Parameter of command is not digit"]
+
+    elements = string_in.split(' ')
+    if not len(string_in) > 0:
+        n=1
+    elif not string_in[0]=='/':
+        n=2
+    elif not ' ' in string_in:
+        n=3
+    elif not elements[1].isdigit():
+        n=4
+    else:
+        n=0
+    return check_strings[n]
+```
+
+Використаємо створену функцію для обробки основних можливів типів вводу:
+```py
+def check_sting_in(string_in):
+    check_strings = ["Your input is correct","Your input is empty","First symbol of your input is not slash.","Your input does not contain spaces","Parameter of command is not digit"]
+
+    elements = string_in.split(' ')
+    if not len(string_in) > 0:
+        n=1
+    elif not string_in[0]=='/':
+        n=2
+    elif not ' ' in string_in:
+        n=3
+    elif not elements[1].isdigit():
+        n=4
+    else:
+        n=0
+    return check_strings[n]
+
+print(check_sting_in("/income 10")) # Your input is correct
+print(check_sting_in("")) # Your input is empty
+print(check_sting_in("income 10")) # First symbol of your input is not slash.
+print(check_sting_in("/income10")) # Your input does not contain spaces
+print(check_sting_in("/income ten")) # Parameter of command is not digit
+```
+
+Теперд додамо функцію перевірки до коду нашого боту:
+```py
+from telegram.ext import Application, MessageHandler, filters, CommandHandler
+account = 0
+check_strings = ["Your input is correct","Your input is empty","First symbol of your input is not slash.","Your input does not contain spaces","Parameter of command is not digit"]
 
 
+def check_sting_in(string_in):
+    elements = string_in.split(' ')
+    if not len(string_in) > 0:
+        n=1
+    elif not string_in[0]=='/':
+        n=2
+    elif not ' ' in string_in:
+        n=3
+    elif not elements[1].isdigit():
+        n=4
+    else:
+        n=0
+    return n
+
+async def income(update, context):
+    global account
+    string_in = update.message.text
+    elements = string_in.split(' ')
+    account = account + int(elements[1])
+    string_out = str(account)
+    await update.message.reply_text(string_out)
+
+async def cost(update, context):
+    global account
+    string_in = update.message.text
+    elements = string_in.split(' ')
+    account = account - int(elements[1])
+    string_out = str(account)
+    await update.message.reply_text(string_out)
+
+
+async def echo(update, context):
+    string_in = update.message.text
+    if not(check_sting_in(string_in)):
+        if string_in == '/start':
+            string_out = 'Hello! This is own finances bot!'
+        else:
+            string_out = string_in
+    else:
+        string_out=check_strings[check_sting_in(string_in)]
+
+    await update.message.reply_text(string_out)
+
+application = Application.builder().token("").build()
+
+application.add_handler(CommandHandler('income', income))
+application.add_handler(CommandHandler('cost', cost))
+application.add_handler(MessageHandler(filters.TEXT, echo))
+
+application.run_polling()
+
+
+```
