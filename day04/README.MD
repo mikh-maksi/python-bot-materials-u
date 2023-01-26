@@ -10,7 +10,7 @@ from telegram.ext import Application, MessageHandler, CommandHandler, filters
 
 
 ```py
-async ef start(update, context):
+async def start(update, context):
     chat = update.effective_chat
     context.bot.send_message(chat_id=chat.id, text="Привіт! Це own finances bot!")
     await context.bot.send_message(chat_id=chat.id, text=string_out)
